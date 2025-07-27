@@ -19,3 +19,34 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+
+---
+
+## 🧪 `Install.ps1` – One-Click Installer
+
+> This downloads and installs the module from a remote ZIP.
+
+```powershell
+# Install.ps1
+param(
+    [string]$DownloadUrl = "https://yourdomain.com/PHWhatsapp.zip"
+)
+
+$moduleName = "PHWhatsapp"
+$installPath = "C:\Program Files\WindowsPowerShell\Modules\$moduleName"
+$zipFile = "$env:TEMP\$moduleName.zip"
+
+Write-Host "Downloading PHWhatsapp module from $DownloadUrl..."
+Invoke-WebRequest -Uri $DownloadUrl -OutFile $zipFile -UseBasicParsing
+
+Write-Host "Extracting to $installPath..."
+Expand-Archive -Path $zipFile -DestinationPath $installPath -Force
+
+Remove-Item $zipFile -Force
+
+Import-Module $moduleName -Force
+Write-Host "PHWhatsapp module installed and loaded successfully."
+
+Write-Host "`nSet credentials like this:"
+Write-Host "Set-WhatsappConfig -IdInstance 'YOUR_ID' -ApiToken 'YOUR_TOKEN'"
